@@ -8,10 +8,10 @@
         <?php
             if (!empty($_GET['id']))
             {
-                $conn = pg_connect('host=localhost port=5432 dbname=livro user=postgres password=');
+                $conn = mysqli_connect('localhost', 'root', '', 'livro');
                 $id = (int) $_GET['id'];
-                $result = pg_query($conn, "SELECT * FROM pessoa WHERE id='{$id}'");
-                $row = pg_fetch_assoc($result);
+                $result = mysqli_query($conn, "SELECT * FROM pessoa WHERE id='{$id}'");
+                $row = mysqli_fetch_assoc($result);
                 
                 $id         = $row['id'];
                 $nome       = $row['nome'];

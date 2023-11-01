@@ -3,7 +3,7 @@ $dados = $_POST;
 
 if ($dados['id'])
 {
-    $conn = pg_connect('host=localhost port=5432 dbname=livro user=postgres password=');
+    $conn = mysqli_connect('localhost', 'root', '', 'livro');
     
     $sql = "UPDATE pessoa SET nome      = '{$dados['nome']}',
                               endereco  = '{$dados['endereco']}',
@@ -12,7 +12,7 @@ if ($dados['id'])
                               email     = '{$dados['email']}',
                               id_cidade = '{$dados['id_cidade']}'
                           WHERE id = '{$dados['id']}'";
-    $result = pg_query($conn, $sql);
+    $result = mysqli_query($conn, $sql);
     
     if ($result)
     {
@@ -20,7 +20,7 @@ if ($dados['id'])
     }
     else
     {
-        print pg_last_error($conn);
+        print mysqli_error($conn);
     }
-    pg_close($conn);
+    mysqli_close($conn);
 }

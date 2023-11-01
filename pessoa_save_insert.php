@@ -1,10 +1,10 @@
 <?php
 $dados = $_POST;
 
-$conn = pg_connect('host=localhost port=5432 dbname=livro user=postgres password=');
+$conn = mysqli_connect('localhost', 'root', '', 'livro');
 
-$result = pg_query($conn, 'SELECT max(id) as next FROM pessoa');
-$row = pg_fetch_assoc($result);
+$result = mysqli_query($conn, 'SELECT max(id) as next FROM pessoa');
+$row = mysqli_fetch_assoc($result);
 $next = (int) $row['next'] + 1;
 
 $sql = "INSERT INTO pessoa (id, nome, endereco,
@@ -17,7 +17,7 @@ $sql = "INSERT INTO pessoa (id, nome, endereco,
                 '{$dados['email']}',
                 '{$dados['id_cidade']}')";
 
-$result = pg_query($conn, $sql);
+$result = mysqli_query($conn, $sql);
 
 if ($result)
 {
@@ -25,7 +25,7 @@ if ($result)
 }
 else
 {
-    print pg_last_error($conn);
+    print mysqli_error($conn);
 }
 
-pg_close($conn);
+mysqli_close($conn);
