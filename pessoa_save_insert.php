@@ -1,28 +1,31 @@
 <?php
-
 $dados = $_POST;
 
-$conn = mysqli_connect("localhost", "livro", "root", "",);
+$conn = pg_connect('host=localhost port=5432 dbname=livro user=postgres password=');
 
-$result = mysqli_query($conn, "SELECT max(id) as next FROM pessoas");// max() retorna o ultimo id
-$row = mysqli_fetch_assoc($result);
+$result = pg_query($conn, 'SELECT max(id) as next FROM pessoa');
+$row = pg_fetch_assoc($result);
 $next = (int) $row['next'] + 1;
 
-$sqli = "INSERT INTO pessoas (id, nome, endereco, bairro, telefone, email, id_cidade) VALUES ( '{$next}', 
-'{$dados['nome']}', 
-'{$dados['endereco']}', 
-'{$dados['bairro']}', 
-'{$dados['telefone']}',
-'{$dados['email']}', 
-'{$dados['id_cidade']}')";
+$sql = "INSERT INTO pessoa (id, nome, endereco,
+           bairro, telefone, email, id_cidade)
+       VALUES ( '{$next}',
+                '{$dados['nome']}',
+                '{$dados['endereco']}',
+                '{$dados['bairro']}',
+                '{$dados['telefone']}',
+                '{$dados['email']}',
+                '{$dados['id_cidade']}')";
 
-print $sqli;
+$result = pg_query($conn, $sql);
 
-if($result){
-    print 'Registro inserido com sucesso!';
-
-}else{
-    print mysqli_error($conn) . '<br>';
+if ($result)
+{
+    print 'Registro inserido com sucesso';
+}
+else
+{
+    print pg_last_error($conn);
 }
 
-mysqli_close($conn);
+pg_close($conn);
