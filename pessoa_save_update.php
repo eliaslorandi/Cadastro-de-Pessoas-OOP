@@ -1,11 +1,10 @@
 <?php
 $dados = $_POST;
 
-if ($dados['id'])
-{
+if ($dados['id']) {
     $conn = mysqli_connect('localhost', 'root', '', 'livro');
-    
-    $sql = "UPDATE pessoa SET nome      = '{$dados['nome']}',
+
+    $sql = "UPDATE pessoas SET nome      = '{$dados['nome']}',
                               endereco  = '{$dados['endereco']}',
                               bairro    = '{$dados['bairro']}',
                               telefone  = '{$dados['telefone']}',
@@ -13,13 +12,10 @@ if ($dados['id'])
                               id_cidade = '{$dados['id_cidade']}'
                           WHERE id = '{$dados['id']}'";
     $result = mysqli_query($conn, $sql);
-    
-    if ($result)
-    {
+
+    if ($result) {
         print 'Registro atualizado com sucesso';
-    }
-    else
-    {
+    } else {
         print mysqli_error($conn);
     }
     mysqli_close($conn);

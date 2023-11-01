@@ -3,11 +3,11 @@ $dados = $_POST;
 
 $conn = mysqli_connect('localhost', 'root', '', 'livro');
 
-$result = mysqli_query($conn, 'SELECT max(id) as next FROM pessoa');
+$result = mysqli_query($conn, 'SELECT max(id) as next FROM pessoas');
 $row = mysqli_fetch_assoc($result);
 $next = (int) $row['next'] + 1;
 
-$sql = "INSERT INTO pessoa (id, nome, endereco,
+$sql = "INSERT INTO pessoas (id, nome, endereco,
            bairro, telefone, email, id_cidade)
        VALUES ( '{$next}',
                 '{$dados['nome']}',

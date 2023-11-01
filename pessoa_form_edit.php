@@ -10,7 +10,7 @@
             {
                 $conn = mysqli_connect('localhost', 'root', '', 'livro');
                 $id = (int) $_GET['id'];
-                $result = mysqli_query($conn, "SELECT * FROM pessoa WHERE id='{$id}'");
+                $result = mysqli_query($conn, "SELECT * FROM pessoas WHERE id='{$id}'");
                 $row = mysqli_fetch_assoc($result);
                 
                 $id         = $row['id'];

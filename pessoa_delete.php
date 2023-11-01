@@ -6,7 +6,7 @@ if ($dados['id'])
     $conn = mysqli_connect('localhost', 'root', '', 'livro');
     
     $id  = (int) $dados['id'];
-    $sql = "DELETE FROM pessoa WHERE id='{$id}'";
+    $sql = "DELETE FROM pessoas WHERE id='{$id}'";
     
     $result = mysqli_query($conn, $sql);
     
