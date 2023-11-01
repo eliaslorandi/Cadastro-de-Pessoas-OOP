@@ -27,5 +27,4 @@ input[readonly="1"]{
     form > input[type="submit"]{
         margin-left:25%;
         clear:both;
-        font-family: 'comic sans ms';
     }

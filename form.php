@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> Cadastro de Pessoas </title>
-    <link rel="stylesheet" href="../css/form.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="css/form.css" type="text/css" media="screen" />
 </head>
 
 <body>
@@ -31,12 +31,14 @@
         <label> Cidade </label>
         <select name="id_cidade" style="width:25%">
             <?php
-                require_once 'lista_combo_cidades.php';
-                print lista_combo_cidades();
+            require_once 'lista_combo_cidades.php';
+            print lista_combo_cidades();
             ?>
         </select>
 
-        <input type="submit" value="Enviar">
+        <button type="submit"> Enviar
+        </button>
+    </form>
 
 </body>
 
