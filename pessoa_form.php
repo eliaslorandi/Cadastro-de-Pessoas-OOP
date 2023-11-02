@@ -33,33 +33,33 @@ if (!empty($_REQUEST['action'])) { //request pega tanto get quanto post
         $email      = $_POST['email'];
         $id_cidade  = $_POST['id_cidade'];
 
-        if(empty($_POST['id'])){
-            $result = $mysqli_query($conn, "SELECT max(id) as next FROM pessoas");
+        if (empty($_POST['id'])) {
+            $result = mysqli_query($conn, "SELECT max(id) as next FROM pessoas");
             $row = mysqli_fetch_assoc($result);
             $next = (int)$row = $row['next'] + 1;
 
             $sql = "INSERT INTO pessoas (id, nome, endereco, bairro, telefone, email, id_cidade)
                     VALUES ('{$next}', '{$nome}', '{$endereco}', '{$bairro}', '{$telefone}', '{$email}', '{$id_cidade}')";
 
-            $result = $mysqli_query($conn, $sql);
-        }else{
-            $sql = "UPDATE pessoa SET nome = '{$nome}',
+            $result = mysqli_query($conn, $sql);
+        } else {
+            $sql = "UPDATE pessoas SET nome = '{$nome}',
                                       endereco = '{$endereco}',
                                       bairro = '{$bairro}',
                                       telefone = '{$telefone}',
                                       email = '{$email}',
                                       id_cidade = '{$id_cidade}'
-            WHERE id = '{$id}'";
-            $result = $mysqli_query($conn, $sql);
+                                      WHERE id = '{$id}'";
+            $result = mysqli_query($conn, $sql);
         }
-        print($result) ? 'Registro salvo com sucesso' : mysqli_error($conn);
+        print ($result) ? 'Registro salvo com sucesso' : mysqli_error($conn);
         mysqli_close($conn);
     }
 }
 require_once 'lista_combo_cidades.php';
-$cidades = lista_combo_cidades($id_cidade);
+$cidades = lista_combo_cidades($id_cidade); //gera as options do select
 
-$form = file_get_contents('html/form.html');
+$form = file_get_contents('html/form.html'); //retorna como string o conteudo do arquivo
 $form = str_replace('{id}', $id, $form);
 $form = str_replace('{nome}', $nome, $form);
 $form = str_replace('{endereco}', $endereco, $form);
@@ -67,6 +67,6 @@ $form = str_replace('{bairro}', $bairro, $form);
 $form = str_replace('{telefone}', $telefone, $form);
 $form = str_replace('{email}', $email, $form);
 $form = str_replace('{id_cidade}', $id_cidade, $form);
-$form = str_replace('{cidades}', $cidades, $form);
+$form = str_replace('{cidades}', $cidades, $form); //retornando as cidades aqui, de $cidades
 
 print $form;
