@@ -4,7 +4,7 @@ function lista_combo_cidades( $id_cidade = null )
     $conn = mysqli_connect('localhost', 'root', '', 'livro');
     
     $output = '';
-    $result = mysqli_query($conn, 'SELECT id, nome FROM cidade');
+    $result = mysqli_query($conn, 'SELECT id, nome FROM cidades');
     if ($result)
     {
         while ($row = mysqli_fetch_assoc($result))
