@@ -1,5 +1,6 @@
 <?php
 require_once 'database/pessoa_db.php';
+require_once 'lista_combo_cidades.php';
 
 $pessoa = [];
 $pessoa['id']        = '';
@@ -11,43 +12,26 @@ $pessoa['email']     = '';
 $pessoa['id_cidade'] = '';
 
 if (!empty($_REQUEST['action'])) { //request pega tanto get quanto post
-    $conn = mysqli_connect('localhost', 'root', '', 'livro');
 
     if ($_REQUEST['action'] == 'edit') {
         if (!empty($_GET['id'])) {
             $id = (int) $_GET['id'];
-            $result = mysqli_query($conn, "SELECT * FROM pessoas WHERE id='{$id}'");
-            $pessoa = mysqli_fetch_assoc($result);
+            $pessoa = get_pessoa($id); //funcao do banco (pessoa_db.php
         }
     } else if ($_REQUEST['action'] == 'save') {
         $id = $_POST['id'];
         $pessoa = $_POST;
 
-        if (empty($_POST['id'])) {
-            $result = mysqli_query($conn, "SELECT max(id) as next FROM pessoas");
-            $row = mysqli_fetch_assoc($result);
-            $next = (int)$row = $row['next'] + 1; //proximo registro
-
-            $sql = "INSERT INTO pessoas (id, nome, endereco, bairro, telefone, email, id_cidade)
-                    VALUES ('{$next}', '{$pessoa['nome']}', '{$pessoa['endereco']}', '{$pessoa['bairro']}', '{$pessoa['telefone']}', '{$pessoa['email']}', '{$pessoa['id_cidade']}')";
-
-            $result = mysqli_query($conn, $sql);
+        if (empty($_POST['id'])) { //id vazio vai para insert, se não update
+            $pessoa['id'] = get_next_pessoa(); //get pega o id e joga na variavel
+            $result = insert_pessoa($pessoa);
         } else {
-            $sql = "UPDATE pessoas SET nome = '{$pessoa['nome']}',
-                                      endereco = '{$pessoa['endereco']}',
-                                      bairro = '{$pessoa['bairro']}',
-                                      telefone = '{$pessoa['telefone']}',
-                                      email = '{$pessoa['email']}',
-                                      id_cidade = '{$pessoa['id_cidade']}'
-                                      WHERE id = '{$id}'";
-            $result = mysqli_query($conn, $sql);
+            $result = update_pessoa($pessoa);
         }
-        print ($result) ? 'Registro salvo com sucesso' : mysqli_error($conn);
-        mysqli_close($conn);
+        print ($result) ? 'Registro salvo com sucesso' : 'Problemas ao salvar o registro';
     }
 }
-require_once 'lista_combo_cidades.php';
-$cidades = lista_combo_cidades($pessoa ['id_cidade']); //gera as options do select
+$cidades = lista_combo_cidades($pessoa['id_cidade']); //gera as options do select
 
 $form = file_get_contents('html/form.html'); //retorna como string o conteudo do arquivo
 $form = str_replace('{id}',        $pessoa['id'], $form);

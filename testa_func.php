@@ -2,4 +2,4 @@
 require 'database/pessoa_db.php';
 
 echo '<pre>';
-print_r(get_next_pessoa(3));
+print_r(lista_pessoas());
