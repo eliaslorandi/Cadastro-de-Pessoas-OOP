@@ -1,4 +1,6 @@
 <?php
+require_once 'database/pessoa_db.php';
+
 $pessoa = [];
 $pessoa['id']        = '';
 $pessoa['nome']      = '';
