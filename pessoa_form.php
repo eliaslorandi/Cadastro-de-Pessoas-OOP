@@ -1,6 +1,6 @@
 <?php
-require_once 'database/pessoa_db.php';
-require_once 'lista_combo_cidades.php';
+require_once 'classes/Pessoa.php';
+require_once 'classes/Cidade.php';
 
 $pessoa = [];
 $pessoa['id']        = '';
@@ -12,26 +12,32 @@ $pessoa['email']     = '';
 $pessoa['id_cidade'] = '';
 
 if (!empty($_REQUEST['action'])) { //request pega tanto get quanto post
-
-    if ($_REQUEST['action'] == 'edit') {
-        if (!empty($_GET['id'])) {
-            $id = (int) $_GET['id'];
-            $pessoa = get_pessoa($id); //funcao do banco (pessoa_db.php
+    try{
+        if ($_REQUEST['action'] == 'edit') {
+            if (!empty($_GET['id'])) {
+                $id = (int) $_GET['id'];
+                $pessoa = Pessoa::find($id);
+            }
+        } else if ($_REQUEST['action'] == 'save') {
+            $id = $_POST['id'];
+            $pessoa = $_POST;
+            Pessoa::save($pessoa);
+            print 'Registro salvo com sucesso';
         }
-    } else if ($_REQUEST['action'] == 'save') {
-        $id = $_POST['id'];
-        $pessoa = $_POST;
-
-        if (empty($_POST['id'])) { //id vazio vai para insert, se não update
-            $pessoa['id'] = get_next_pessoa(); //get pega o id e joga na variavel
-            $result = insert_pessoa($pessoa);
-        } else {
-            $result = update_pessoa($pessoa);
-        }
-        print ($result) ? 'Registro salvo com sucesso' : 'Problemas ao salvar o registro';
+    }
+    catch(Exception $e){
+        print $e->getMessage();
     }
 }
-$cidades = lista_combo_cidades($pessoa['id_cidade']); //gera as options do select
+
+$cidades = '';
+foreach(Cidade::all() as $cidade){
+    $id = $cidade['id'];
+    $nome = $cidade['nome'];
+
+    $check = ($cidade['id'] == $pessoa['id_cidade']) ? 'selected=1' : '';
+    $cidades.= "<option {$check} value='{$id}'> {$nome} </option>";
+}
 
 $form = file_get_contents('html/form.html'); //retorna como string o conteudo do arquivo
 $form = str_replace('{id}',        $pessoa['id'], $form);

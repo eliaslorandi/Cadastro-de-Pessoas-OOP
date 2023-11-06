@@ -1,12 +1,16 @@
 <?php
-require_once 'database/pessoa_db.php';
+require_once 'classes/Pessoa.php';
 
-if (!empty($_GET['action']) and $_GET['action'] == 'delete') {
-    $id = (int) $_GET['id'];
-    excluir_pessoa($id);
+try{//tratar excessao, todas vao pra fora do if
+    if (!empty($_GET['action']) and $_GET['action'] == 'delete') {
+        $id = (int) $_GET['id'];
+        Pessoa::delete($id); //metodo delete da classe Pessoa
+    }
+    $pessoas = Pessoa::all(); //metodo all da classe Pessoa
 }
-$pessoas = lista_pessoas();
-
+catch(Exception $e){
+    print $e->getMessage();
+}
 $items = '';
 
 if ($pessoas) {
