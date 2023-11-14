@@ -12,7 +12,7 @@ $pessoa['email']     = '';
 $pessoa['id_cidade'] = '';
 
 if (!empty($_REQUEST['action'])) { //request pega tanto get quanto post
-    try{
+    try {
         if ($_REQUEST['action'] == 'edit') {
             if (!empty($_GET['id'])) {
                 $id = (int) $_GET['id'];
@@ -24,19 +24,18 @@ if (!empty($_REQUEST['action'])) { //request pega tanto get quanto post
             Pessoa::save($pessoa);
             print 'Registro salvo com sucesso';
         }
-    }
-    catch(Exception $e){
+    } catch (Exception $e) {
         print $e->getMessage();
     }
 }
 
 $cidades = '';
-foreach(Cidade::all() as $cidade){
+foreach (Cidade::all() as $cidade) {
     $id = $cidade['id'];
     $nome = $cidade['nome'];
 
     $check = ($cidade['id'] == $pessoa['id_cidade']) ? 'selected=1' : '';
-    $cidades.= "<option {$check} value='{$id}'> {$nome} </option>";
+    $cidades .= "<option {$check} value='{$id}'> {$nome} </option>";
 }
 
 $form = file_get_contents('html/form.html'); //retorna como string o conteudo do arquivo
