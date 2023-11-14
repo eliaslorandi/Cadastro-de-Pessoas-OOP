@@ -1,10 +1,26 @@
 <?php
 class Pessoa
 {
+    private static $conn; //static para manter o valor inicial
+
+    public static function getConneciton()
+    {
+        if (empty(self::$conn)) { //if para nao abrir a conexao só vez, se estiver aberta, usa a mesma conexão
+            $ini = parse_ini_file('config/livro.ini');
+            $host = $ini['host'];
+            $name = $ini['name'];
+            $user = $ini['user'];
+            $pass = $ini['pass'];
+
+            self::$conn = new PDO("mysql:host={$host}; dbname={$name}; password={$pass}; user={$user}");
+            self::$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        }
+        return self::$conn;
+    }
+
     public static function find($id)
     {
-        $conn = new PDO("mysql:host=localhost;dbname=livro", "root", "");
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //tratamento de erros será tratado como excessao
+        $conn = self::getConneciton();
 
         $result = $conn->query("SELECT * FROM pessoas WHERE id='{$id}'");
         return $result->fetch(); //retorne para quem chamou
@@ -12,8 +28,7 @@ class Pessoa
 
     public static function delete($id)
     {
-        $conn = new PDO("mysql:host=localhost;dbname=livro", "root", "");
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //tratamento de erros será tratado como excessao
+        $conn = self::getConneciton();
 
         $result = $conn->query("DELETE FROM pessoas WHERE id='{$id}'");
         return $result;
@@ -21,8 +36,7 @@ class Pessoa
 
     public static function all()
     {
-        $conn = new PDO("mysql:host=localhost;dbname=livro", "root", "");
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //tratamento de erros será tratado como excessao
+        $conn = self::getConneciton();
 
         $result = $conn->query("SELECT * FROM pessoas ORDER BY id");
         return $result->fetchAll();
@@ -30,8 +44,7 @@ class Pessoa
 
     public static function save($pessoa)
     {
-        $conn = new PDO("mysql:host=localhost;dbname=livro", "root", "");
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); //tratamento de erros será tratado como excessao
+        $conn = self::getConneciton();
 
         if (empty($pessoa['id'])) {
             $result = $conn->query("SELECT max(id) as next FROM pessoas");

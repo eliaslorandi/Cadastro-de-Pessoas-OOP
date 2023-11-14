@@ -1,14 +1,13 @@
 <?php
 require_once 'classes/Pessoa.php';
 
-try{//tratar excessao, todas vao pra fora do if
+try { //tratar excessao, todas vao pra fora do if, operações que interagem com o banco de dados
     if (!empty($_GET['action']) and $_GET['action'] == 'delete') {
         $id = (int) $_GET['id'];
         Pessoa::delete($id); //metodo delete da classe Pessoa
     }
     $pessoas = Pessoa::all(); //metodo all da classe Pessoa
-}
-catch(Exception $e){
+} catch (Exception $e) {
     print $e->getMessage();
 }
 $items = '';
